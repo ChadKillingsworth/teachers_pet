@@ -32,6 +32,10 @@ module TeachersPet
           end
           repo_name = "#{student}-#{@repository}"
 
+          self.client.update_team(org_teams[student][:id],
+            permission: "pull"
+          )
+
           if self.client.repository?(@organization, repo_name)
             puts " --> Already exists, skipping '#{repo_name}'"
             next
@@ -44,9 +48,10 @@ module TeachersPet
             has_issues: true,
             has_wiki: false,
             has_downloads: false,
-            organization: @organization,
-            team_id: org_teams[student][:id]
+            organization: @organization
           )
+          self.client.add_team_repository(org_teams[student][:id],
+            repo_name, {permission => "pull"})
         end
       end
 
